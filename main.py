@@ -80,7 +80,35 @@ def max_repeated(president: str) -> None:
     print_list("Mot(s) le(s) plus répété(s) par le président Chirac :", list_words)  # Affichage
 
 
-def f4(): pass
+def lookfor_word(word: str, most: bool) -> None:
+    """
+    Affiche le nom du (des) président(s) qui ont parlé d'un certain mot
+    Avec la possibilité d'afficher celui qui en a parlé le plus
+    :param word: le mot à rechercher
+    :param most: active l'affichage de celui qui en parle le plus
+    """
+    tfidf = tf_idf_matrice(CORPUS_CLEAN)
+
+    association = extract_names(CORPUS_CLEAN)  # Récupération d'un dictionnaire président : list[fichier]
+
+    list_president = []
+    tfidf_max = 0
+    president_max = ""
+
+    for file in tfidf[word]:
+        if tfidf[word][file] > 0:  # Signifie que le président en parle 
+            for president in association:
+                if file in association[president]:  # Récupération du nom du président qui a prononcé le discours
+                    list_president.append(president)
+                    if tfidf[word][file] > tfidf_max:  # Définition de celui qui en parle le plus
+                        tfidf_max = tfidf[word][file]
+                        president_max = president
+
+    print_list(f"Président(s) qui a/ont parlés de '{word}' :", set(list_president))  # Affichage
+    if most:
+        print("Le président qui en a le plus parlé est :", president_max)
+
+
 def f5(): pass
 def f6(): pass
 
@@ -93,7 +121,8 @@ OPTIONS = (
     ("Afficher la liste des mots les moins importants", less_important_words),
     ("Afficher le(s) mot(s) ayant le score TF-IDF le plus élevé", max_tfidf_words),
     ("Afficher le(s) mot(s) le(s) plus répété(s) par Chirac", lambda: max_repeated("Chirac")),
-    ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", f4),
+    ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", 
+     lambda: lookfor_word("nation", True)),
     ("Recherche le premier président qui a parlé de climat", f5),
     ("Recherche les mots évoqués par tout les présidents", f6)
 )
