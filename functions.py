@@ -82,6 +82,7 @@ def format_incorpus(corpus_in: str, corpus_clean: str) -> None:
         format_file(corpus_in + file, corpus_clean)
 
 
+
 def print_list(titre: str, lst: list | set | tuple):
     """
     Permet l'affichage d'une liste avec son titre
@@ -91,3 +92,8 @@ def print_list(titre: str, lst: list | set | tuple):
     print(titre)
     for e in lst:
         print("\t- ", e)
+
+if __name__ == "__main__":
+    print("Do not run this file.")
+    print("Run ./main.py instead")
+

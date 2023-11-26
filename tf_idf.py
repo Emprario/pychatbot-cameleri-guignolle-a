@@ -77,3 +77,7 @@ def tf_idf_matrice(corpus: str) -> dict[str:dict[str:float]]:
             else:
                 tfidf[word][file] = 0  # Si tf[word] n'éxiste pas alors tf[word] = 0
     return tfidf
+
+if __name__ == "__main__":
+    print("Do not run this file.")
+    print("Run ./main.py instead")
