@@ -79,3 +79,7 @@ def format_incorpus(corpus_in: str, corpus_clean: str) -> None:
     """
     for file in listdir(corpus_in):
         format_file(corpus_in + file, corpus_clean)
+
+if __name__ == "__main__":
+    print("Do not run this file.")
+    print("Run ./main.py instead")
