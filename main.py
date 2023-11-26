@@ -109,7 +109,6 @@ def lookfor_word(word: str, most: bool) -> None:
         print("Le président qui en a le plus parlé est :", president_max)
 
 
-def f5(): pass
 def f6(): pass
 
 
@@ -123,7 +122,7 @@ OPTIONS = (
     ("Afficher le(s) mot(s) le(s) plus répété(s) par Chirac", lambda: max_repeated("Chirac")),
     ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", 
      lambda: lookfor_word("nation", True)),
-    ("Recherche le premier président qui a parlé de climat", f5),
+    ("Recherche le premier président qui a parlé de climat", lambda: lookfor_word("climat", False)),
     ("Recherche les mots évoqués par tout les présidents", f6)
 )
 
