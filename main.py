@@ -109,7 +109,20 @@ def lookfor_word(word: str, most: bool) -> None:
         print("Le président qui en a le plus parlé est :", president_max)
 
 
-def f6(): pass
+def common_words() -> None:
+    """
+    Affiche les mots qui sont dits par tous les présidents dans leurs investitures. NB : aucun mot n'est
+    non-important, car pour TF-IDF = 0 ⇔ Tous les IDF = 0 (parce que TF != 0 sinon pas dans la liste)
+    Or log(X) = 0 ⇒ X = 1 ⇒ nb_doc/nb_apparition = 0 ⇒ nb_doc = 0 Impossible donc TF-IDF != 0
+    Ainsi, on ne prend pas en compte si un mot est non-importants, car il est nécessairement important
+    """
+    matrice = tf_idf_matrice(CORPUS_CLEAN)
+    list_words = []
+    for word in matrice:
+        if 0 not in matrice[word].values():  # Si 0 appartient à un TF-IDF ⇒ TF = 0 ⇒ Le mot n'est pas dit par président
+            list_words.append(word)
+
+    print_list("Le(s) mot(s) évoqué(s) par tous les présidents sont : ", list_words)
 
 
 CORPUS_CLEAN = "./cleaned/"
@@ -123,7 +136,7 @@ OPTIONS = (
     ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", 
      lambda: lookfor_word("nation", True)),
     ("Recherche le premier président qui a parlé de climat", lambda: lookfor_word("climat", False)),
-    ("Recherche les mots évoqués par tout les présidents", f6)
+    ("Recherche les mots évoqués par tout les présidents", common_words)
 )
 
 if __name__ == "__main__":
