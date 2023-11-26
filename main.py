@@ -35,7 +35,26 @@ def less_important_words() -> None:
     print_list("Mots les moins importants (selon seuil) :", tfidf_seuil)  # Affichage
 
 
-def f2(): pass
+def max_tfidf_words() -> None:
+    """
+    Affiche le(s) mot(s) avec le score tf-idf le plus élevé
+    """
+    matrice = tf_idf_matrice(CORPUS_CLEAN)
+    score_max = 0.0
+    list_words = []
+
+    for word in matrice:
+        for text in matrice[word]:
+            score = matrice[word][text]
+            if score > score_max:  # Si le nouveau score est plus élevé alors, on change le mot
+                score_max = score
+                list_words = [word]
+            elif score == score_max:  # Si le nouveau score est égal alors, on rajoute le mot
+                list_words.append(word)
+
+    print_list("Mot(s) ayant le score TF-IDF le plus élevé :", list_words)  # Affichage
+
+
 def f3(): pass
 def f4(): pass
 def f5(): pass
@@ -48,7 +67,7 @@ NB_TEXT = len(listdir(CORPUS_IN))
 OPTIONS = (
     ("Sortir", exit),
     ("Afficher la liste des mots les moins importants", less_important_words),
-    ("Afficher le(s) mot(s) ayant le score TF-IDF le plus élevé", f2),
+    ("Afficher le(s) mot(s) ayant le score TF-IDF le plus élevé", max_tfidf_words),
     ("Afficher le(s) mot(s) le(s) plus répété(s) par Chirac", f3),
     ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", f4),
     ("Recherche le premier président qui a parlé de climat", f5),
