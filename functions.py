@@ -1,4 +1,5 @@
-from os import listdir
+from os import listdir, mkdir
+from os.path import exists
 
 
 NOM_PRENOM = {
@@ -39,3 +40,42 @@ def print_president_fullname(corpus: str) -> None:
     for name in extract_names(corpus):
         print(NOM_PRENOM[name] + ' ' + name)
 
+
+def format_file(file: str, output_dir: str) -> None:
+    """
+    Formate le fichier fourni
+    :param file: chemin du fichier à traiter
+    :param output_dir: chemin du dossier où stocker le fichier traité
+    """
+    if not exists(output_dir): mkdir(output_dir)
+
+    new_file = output_dir + file.split('/')[-1]  # Chemin du nouveau fichier
+
+    # Création du nouveau fichier
+    with open(file, 'r', encoding='utf-8') as entry, open(new_file, 'w', encoding='utf-8') as target:
+        pre_char = ""
+        for char in entry.read():
+            if 'A' <= char <= 'Z':
+                char = chr(ord(char) + 32)      # Passage en minuscule
+            elif char == "'" or char == "`":
+                char = ' '                      # Conversion des apostrophes en espace
+            elif char in ".,;!\"?_":
+                char = ''                       # Suppression de la ponctuation
+            elif char == '-' or char == ':':
+                if pre_char != ' ' and pre_char != '\n':
+                    char = ' '
+                else:
+                    char = ''
+            elif char == ' ' and (pre_char == ' ' or pre_char == '\n'):
+                char = ''                       # Suppression des doubles espaces
+            target.write(char)
+            pre_char = char
+
+def format_incorpus(corpus_in: str, corpus_clean: str) -> None:
+    """
+    Formate tous les fichiers fournis
+    :param corpus_in: chemin du dossier où se trouvent les fichiers
+    :param corpus_clean: chemin du dossier où stocker les fichiers formattés
+    """
+    for file in listdir(corpus_in):
+        format_file(corpus_in + file, corpus_clean)
