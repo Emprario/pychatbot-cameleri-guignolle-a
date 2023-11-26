@@ -12,7 +12,29 @@ def clean() -> None:
     else:
         system("clear")
 
-def f1(): pass
+
+def less_important_words() -> None:
+    """
+    Affiche les mots avec un score tf-idf inférieur à un certain seuil
+    """
+    seuil = 0
+    while seuil <= 0:
+        seuil = float(input("Indiquez le score maximum souhaité : "))
+
+    matrice = tf_idf_matrice(CORPUS_CLEAN)
+    tfidf_seuil = []
+
+    for word in matrice:
+        score_sum = 0.0
+        for text in matrice[word]:
+            score_sum += matrice[word][text]
+        score = score_sum / NB_TEXT  # Calcul d'un score tf-idf moyen d'un mot sur tous les fichiers
+        if score <= seuil:
+            tfidf_seuil.append(word)
+
+    print_list("Mots les moins importants (selon seuil) :", tfidf_seuil)  # Affichage
+
+
 def f2(): pass
 def f3(): pass
 def f4(): pass
@@ -22,9 +44,10 @@ def f6(): pass
 
 CORPUS_CLEAN = "./cleaned/"
 CORPUS_IN = "./speeches/"
+NB_TEXT = len(listdir(CORPUS_IN))
 OPTIONS = (
     ("Sortir", exit),
-    ("Afficher la liste des mots les moins importants", f1),
+    ("Afficher la liste des mots les moins importants", less_important_words),
     ("Afficher le(s) mot(s) ayant le score TF-IDF le plus élevé", f2),
     ("Afficher le(s) mot(s) le(s) plus répété(s) par Chirac", f3),
     ("Afficher le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et le plus de fois", f4),

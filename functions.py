@@ -71,6 +71,7 @@ def format_file(file: str, output_dir: str) -> None:
             target.write(char)
             pre_char = char
 
+
 def format_incorpus(corpus_in: str, corpus_clean: str) -> None:
     """
     Formate tous les fichiers fournis
@@ -79,3 +80,14 @@ def format_incorpus(corpus_in: str, corpus_clean: str) -> None:
     """
     for file in listdir(corpus_in):
         format_file(corpus_in + file, corpus_clean)
+
+
+def print_list(titre: str, lst: list | set | tuple):
+    """
+    Permet l'affichage d'une liste avec son titre
+    :param titre: le titre de la liste
+    :param lst: la liste à afficher
+    """
+    print(titre)
+    for e in lst:
+        print("\t- ", e)
