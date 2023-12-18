@@ -1,5 +1,12 @@
-from math import log
+"""
+Projet : pyChatBot
+Auteurs : Pierre Cameleri, Raphaël Guignolle
+Description : La méthode TF-IDF
+"""
+
+from math import log10
 from os import listdir
+from consts import *
 
 
 def tf_occurences(speech: str) -> dict[str:int]:  # Matrice TF d'un fichier
@@ -13,15 +20,20 @@ def tf_occurences(speech: str) -> dict[str:int]:  # Matrice TF d'un fichier
     word = ""
     # Réécriture de split() selon nos besoins
     for char in speech:
-        if char == " " or char == "\n":
-            if word != '':
-                if word not in tf:
-                    tf[word] = 1
-                else:
-                    tf[word] += 1
+        if char == " ":
+            if word not in tf:
+                tf[word] = 1
+            else:
+                tf[word] += 1
             word = ""
         else:
             word += char
+
+    # Pour le mot de la fin
+    if word not in tf:
+        tf[word] = 1
+    else:
+        tf[word] += 1
     return tf
 
 
@@ -48,7 +60,7 @@ def idf_score(corpus: str) -> dict[str:float]:
     # Calcul du score idf pour chaque mot du corpus
     idf = {}
     for word in flat:
-        idf[word] = log((nb_file / flat[word]) + 1, 10)
+        idf[word] = log10(nb_file / flat[word])
     return idf
 
 
@@ -75,8 +87,42 @@ def tf_idf_matrice(corpus: str) -> dict[str:dict[str:float]]:
             if word in tf:
                 tfidf[word][file] = tf[word] * idf_global[word]
             else:
-                tfidf[word][file] = 0  # Si tf[word] n'éxiste pas alors tf[word] = 0
+                tfidf[word][file] = 0.0  # Si tf[word] n'éxiste pas alors tf[word] = 0
     return tfidf
+
+
+def get_prompt_tfidf(format_prompt: list[str]) -> dict[str:dict[str:float]]:
+    """
+    Calcul du score tf-idf du prompt fourni
+    :param format_prompt: prompt tokenisé
+    :return: matrice tf-idf
+    """
+    tfidf = {}
+    IDF = idf_score(CORPUS_CLEAN)
+    TF = tf_occurences(" ".join(format_prompt))
+    for word in IDF:
+        if word not in TF:
+            tfidf[word] = {PROMPT_TEXT: 0.0}
+        else:
+            tfidf[word] = {PROMPT_TEXT: TF[word] * IDF[word]}
+    return tfidf
+
+
+def get_tfidf_max_from_text(tfidf: dict[str:dict[str:float]], text: str) -> str:
+    """
+    Renvoie le mot avec le plus grand score tf-idf dans le texte de la matrice fourni
+    :param tfidf: matrice tf-idf
+    :param text: nom du texte
+    :return: mot avec le tf-idf le plus élevé
+    """
+    maxy = -1
+    better = ""
+    for word in tfidf:
+        if tfidf[word][text] > maxy:
+            maxy = tfidf[word][text]
+            better = word
+    return better
+
 
 if __name__ == "__main__":
     print("Do not run this file.")
