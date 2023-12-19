@@ -1,7 +1,7 @@
 """
 Projet : pyChatBot
 Auteurs : Pierre Cameleri, Raphaël Guignolle
-Description : Gestion de menus
+Description : Gestion des menus
 """
 
 from functions import *
@@ -15,6 +15,7 @@ def less_important_words(verbose: bool, seuil: int = -1) -> list[str]:
     Renvoie les mots avec un score tf-idf inférieur ou égale à un seuil (zéro compris)
     :param verbose: permet l'affichage ou non du résultat
     :param seuil: indique le seuil minimum (optionnel)
+    :return: liste des mots avec un score tf-idf respectant le seuil
     """
     while seuil < 0:
         seuil = float(input("Indiquez le score maximum souhaité (0 pour les mots \"non-importants\") : "))

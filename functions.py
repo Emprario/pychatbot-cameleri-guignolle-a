@@ -42,6 +42,7 @@ def format_text(text: str) -> str:
     """
     Formate le fichier fourni
     :param text: contenu textuel à traiter
+    :return: texte formatté
     """
 
     buffer = ""  # Stockage du texte post-traitement
@@ -127,9 +128,10 @@ def splitter(separator: str, prompt: str) -> list[str]:
 
 def choose_among(header: str, lst: list[str]) -> int:
     """
-    Renvoie le numéro de l'option choisi par l'utilisateur parmi la liste des options affichées
+    Renvoie le numéro de l'option choisie par l'utilisateur parmi la liste des options affichées
     :param header: tête d'affichage
     :param lst: liste des options
+    :return: numéro de l'option choisie
     """
     print(header)
 
